@@ -61,7 +61,7 @@
 </head>
 <body>
     <div class="login-container">
-        <h2>Login Form</h2>
+        <h2>Login de usuarios</h2>
         <form action="${pageContext.request.contextPath}/LoginServlet" method="post">
             <div class="form-group">
                 <label for="username">Username:</label>
@@ -72,7 +72,7 @@
                 <input type="password" id="password" name="password" required>
             </div>
             <div class="form-group">
-                <button type="submit">Login</button>
+                <button type="submit">Entrar</button>
             </div>
         </form>
     </div>

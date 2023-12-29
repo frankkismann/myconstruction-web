@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Define las variables de entorno si es necesario
-        MAVEN_HOME = "C:/Users/Downloads/apache-maven-3.9.6"
+        MAVEN_HOME = "C:/Users/frank/Documents/MAVEN/apache-maven-3.9.6"
     }
 
     stages {

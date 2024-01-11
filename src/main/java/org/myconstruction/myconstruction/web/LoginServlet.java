@@ -33,8 +33,6 @@ public class LoginServlet extends HttpServlet {
         // Obtener los datos del formulario
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        
-        String errorBd = "";
 
         // Flag para comprobar si las credenciales son válidas
         boolean isValidUser = false;
@@ -51,24 +49,32 @@ public class LoginServlet extends HttpServlet {
             }
         } catch (SQLException e) {
             // Manejar excepciones de SQL aquí
-            errorBd = e.toString();
+            // errorBd = e.toString();
         }
 
-        // Preparar la respuesta según si las credenciales son válidas o no
         try (PrintWriter out = response.getWriter()) {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
             out.println("<title>Servlet LoginServlet</title>");
+            out.println("<style>");
+            out.println("body { font-family: 'Times New Roman', Times, serif; background-color: #2c3e50; color: #ecf0f1; display: flex; justify-content: center; align-items: center; height: 100vh; }");
+            out.println(".message-container { text-align: center; background-color: #34495e; padding: 40px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); }");
+            out.println("h2 { margin-bottom: 20px; }");
+            out.println("</style>");
             out.println("</head>");
             out.println("<body>");
 
             if (isValidUser) {
-                out.println("<h2>Bienvenido, " + username + "!</h2>");
+                out.println("<div class='message-container'>");
+                out.println("<h2>Hola " + username + "!</h2>");
                 // Puedes redirigir al usuario a otra página o servlet que maneje la sesión del usuario
+                out.println("</div>");
             } else {
-                out.println("<h2>Nombre de usuario (" + username + ") o contraseña (" + password + ") inválidos.</h2>");
+                out.println("<div class='message-container'>");
+                out.println("<h2>Ha cometido un error en los datos.</h2>");
                 // Puedes permitir al usuario intentarlo de nuevo o mostrar un mensaje de error
+                out.println("</div>");
             }
 
             out.println("</body>");

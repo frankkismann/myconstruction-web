@@ -1,2 +1,3 @@
 org\myconstruction\myconstruction\web\DatabaseConnector.class
+org\myconstruction\myconstruction\web\DBConnector.class
 org\myconstruction\myconstruction\web\LoginServlet.class

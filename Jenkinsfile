@@ -7,7 +7,7 @@ pipeline {
 
     environment {
         // Define las variables de entorno
-        ARTIFACTORY_NAME = 'Artifactory-Server'
+        ARTIFACTORY_NAME = 'MyArtifactoryServer'
         ARTIFACTORY_REPO_KEY = 'myconstruction-libs-release'
         ARTIFACTORY_URL = 'https://appsource.jfrog.io/artifactory'
     }

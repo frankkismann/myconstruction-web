@@ -1,12 +1,16 @@
 pipeline {
     agent any
 
+    tools {
+        // Esta sección asegura que Maven esté configurado si es necesario, puedes ajustar la versión si es diferente.
+        maven 'Maven 3.9.6' 
+    }
+
     environment {
         // Define las variables de entorno si es necesario
-        MAVEN_HOME = "C:/Users/frank/Documents/MAVEN/apache-maven-3.9.6"
         ARTIFACTORY_NAME = 'Artifactory-Server' // El nombre de tu configuración de Artifactory en Jenkins
-        ARTIFACTORY_REPO_KEY = 'your-repo-key' // El key del repositorio de Artifactory para desplegar artefactos
-        ARTIFACTORY_URL = 'http://artifactory.mycompany.com/artifactory' // URL de tu servidor Artifactory
+        ARTIFACTORY_REPO_KEY = 'myconstruction-libs-release' // El key del repositorio de Artifactory para desplegar artefactos
+        ARTIFACTORY_URL = 'https://appsource.jfrog.io/artifactory' // URL de tu servidor Artifactory
     }
 
     stages {
@@ -20,15 +24,16 @@ pipeline {
         stage('Build and Artifactory Publish') {
             steps {
                 script {
-                    def artifactory = Artifactory.server("${ARTIFACTORY_NAME}")
-                    def rtMaven = artifactory.newMavenBuild()
-                    def buildInfo = artifactory.newBuildInfo()
+                    // Definir la instancia de Artifactory y el objeto Maven para la construcción
+                    def server = Artifactory.server(ARTIFACTORY_NAME)
+                    def rtMaven = server.newMavenBuild()
+                    rtMaven.tool = 'Maven 3.9.6' // Asegúrate de que corresponda con el nombre de la herramienta Maven configurada en Jenkins.
+                    rtMaven.resolver server: server, releaseRepo: 'libs-release', snapshotRepo: 'libs-snapshot'
+                    rtMaven.deployer server: server, releaseRepo: ARTIFACTORY_REPO_KEY, snapshotRepo: ARTIFACTORY_REPO_KEY
+                    def buildInfo = rtMaven.run goals: 'clean install -Dmaven.test.skip=true', pom: 'pom.xml'
                     
-                    rtMaven.resolver releaseRepo: 'libs-release', snapshotRepo: 'libs-snapshot'
-                    rtMaven.deployer releaseRepo: "${ARTIFACTORY_REPO_KEY}", snapshotRepo: "${ARTIFACTORY_REPO_KEY}", url: "${ARTIFACTORY_URL}"
-                    rtMaven.run pom: 'pom.xml', goals: 'clean deploy', buildInfo: buildInfo
-                    
-                    artifactory.publishBuildInfo buildInfo
+                    // Publicar la información de construcción en Artifactory
+                    server.publishBuildInfo buildInfo
                 }
             }
         }
@@ -36,7 +41,7 @@ pipeline {
         stage('Code Analysis') {
             steps {
                 // Integrar herramientas de análisis de código como SonarQube
-                bat "\"${MAVEN_HOME}\\bin\\mvn\" sonar:sonar"
+                bat "mvn sonar:sonar"
             }
         }
 

@@ -13,11 +13,11 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
+        /*stage('Checkout') {
             steps {
                 git url: 'https://github.com/frankkismann/myconstruction-web.git'
             }
-        }
+        }*/
 
         stage('Build and Artifactory Publish') {
             steps {
